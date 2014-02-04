@@ -18,8 +18,9 @@ public class Employee {
   @Column(name = "job", nullable = true)
   private String job;
 
-  /*@ManyToOne @JoinColumn(name = "mgr", nullable = true)
-  private Employee manager;*/
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "mgr", nullable = true)
+  private Employee manager;
 
   @Column(name = "sal", nullable = true, precision = 7, scale = 2, columnDefinition = "decimal")
   private Double salary;
@@ -27,8 +28,9 @@ public class Employee {
   @Column(name = "comm", nullable = true, precision = 7, scale = 2, columnDefinition = "decimal")
   private Double commision;
 
-  /*@ManyToOne @JoinColumn(name = "deptno", nullable = true, insertable = false, updatable = false)
-  private Department department;*/
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "deptno", nullable = true, insertable = false, updatable = false)
+  private Department department;
 
   public Employee() {}
 
@@ -56,13 +58,13 @@ public class Employee {
     this.job = job;
   }
 
-  /*public Employee getManager() {
+  public Employee getManager() {
     return manager;
   }
 
   public void setManager(Employee manager) {
     this.manager = manager;
-  }*/
+  }
 
   public Double getSalary() {
     return salary;
@@ -80,13 +82,13 @@ public class Employee {
     this.commision = commision;
   }
 
-  /*public Department getDepartment() {
+  public Department getDepartment() {
     return department;
   }
 
   public void setDepartment(Department department) {
     this.department = department;
-  }*/
+  }
 
   @Override
   public boolean equals(Object o) {

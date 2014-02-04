@@ -3,14 +3,10 @@ package com.imranzahid.test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
-import com.imranzahid.test.jobs.EmployeeTask;
 import com.imranzahid.test.module.ApacheQuartzModule;
 import com.imranzahid.test.module.PersistenceModule;
 import com.imranzahid.test.initializer.ApplicationInitalizer;
 import org.apache.log4j.Logger;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * @author imranzahid Date: 2/3/14 Time: 10:44 AM
