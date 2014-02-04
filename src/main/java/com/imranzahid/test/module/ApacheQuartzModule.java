@@ -1,6 +1,7 @@
 package com.imranzahid.test.module;
 
 import com.imranzahid.test.jobs.EmployeeJob;
+import com.imranzahid.test.jobs.ReportJob;
 
 import java.util.Properties;
 
@@ -15,6 +16,6 @@ public class ApacheQuartzModule extends org.apache.onami.scheduler.QuartzModule 
     properties.put("org.quartz.jobStore.class", "org.quartz.simpl.RAMJobStore");
     configureScheduler().withProperties(properties).withManualStart();
     scheduleJob(EmployeeJob.class).withJobName("employeeJob").withCronExpression("0/5 * * * * ?");
-    //scheduleJob(ReportJob.class).withJobName("reportJob").withCronExpression("0/3 * * * * ?");
+    scheduleJob(ReportJob.class).withJobName("reportJob").withCronExpression("0/3 * * * * ?");
   }
 }

@@ -1,7 +1,5 @@
 package com.imranzahid.test.dao;
 
-import com.google.inject.persist.Transactional;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -16,6 +14,7 @@ public abstract class BaseDao<E> {
   protected Class<E> entityClass;
 
   @Inject private EntityManager entityManager;
+  private boolean inTransaction = false;
 
   public BaseDao(Class<E> entityClass) {
     this.entityClass = entityClass;
@@ -25,28 +24,52 @@ public abstract class BaseDao<E> {
     return entityManager;
   }
 
+  public void beginTransaction() {
+    if (inTransaction) {
+      return;
+    }
+    inTransaction = true;
+    getEntityManager().getTransaction().begin();
+  }
+
+  public void endTransaction() {
+    if (!inTransaction) {
+      return;
+    }
+    inTransaction = false;
+    getEntityManager().getTransaction().commit();
+  }
+
   protected EntityType<E> getMetaModel() {
     return getEntityManager().getMetamodel().entity(entityClass);
   }
 
-  @Transactional public void create(E entity) {
+  public void create(E entity) {
+    beginTransaction();
     getEntityManager().persist(entity);
+    endTransaction();
   }
 
-  @Transactional public void update(E entity) {
+  public void update(E entity) {
+    beginTransaction();
     getEntityManager().merge(entity);
+    endTransaction();
   }
 
-  @Transactional public void remove(int entityId) {
+  public void remove(int entityId) {
+    beginTransaction();
     E entity = find(entityId);
 
     if (entity != null) {
       remove(entity);
     }
+    endTransaction();
   }
 
-  @Transactional public void remove(E entity) {
+  public void remove(E entity) {
+    beginTransaction();
     getEntityManager().remove(getEntityManager().merge(entity));
+    endTransaction();
   }
 
   public E find(Object id) {
@@ -59,7 +82,7 @@ public abstract class BaseDao<E> {
     return getEntityManager().createQuery(cq).getResultList();
   }
 
-  public List<E> findRange(int[] range) {
+  @SuppressWarnings("unchecked") public List<E> findRange(int[] range) {
     CriteriaQuery<E> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
     cq.select(cq.from(entityClass));
 
@@ -67,7 +90,6 @@ public abstract class BaseDao<E> {
     q.setMaxResults(range[1] - range[0]);
     q.setFirstResult(range[0]);
 
-    //noinspection unchecked
     return q.getResultList();
   }
 }

@@ -20,7 +20,8 @@ public class Main {
 
   public static void main(String[] args) {
     log.info("Creating injector");
-    final Injector injector = Guice.createInjector(new PersistenceModule(), new JpaPersistModule("scott-db"));
+    final Injector injector = Guice.createInjector(new PersistenceModule(), new JpaPersistModule("scott-db"),
+                                                   new ApacheQuartzModule());
 
     log.info("Initializing Application");
     final ApplicationInitalizer applicationInitalizer = injector.getInstance(ApplicationInitalizer.class);
@@ -32,17 +33,6 @@ public class Main {
       }
     });
 
-    final int SECOND = 1_000;
-    final int MINUTE = 60 * SECOND;
-    final int HOUR = 60 * MINUTE;
-
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
-      @Override public void run() {
-        injector.getInstance(EmployeeTask.class).run();
-      }
-    };
-    timer.schedule(task, 0L, 5 * SECOND);
     /*log.info("Testing app");
     Test test = injector.getInstance(Test.class);
     test.test();*/

@@ -21,8 +21,7 @@ public class EmployeeJob implements Job {
 
   @Override public void execute(JobExecutionContext context) throws JobExecutionException {
     Employee scott = employeeDao.getByName("scott");
-    log.info(scott);
-    scott.setSalary(scott.getSalary() + (0.1*scott.getSalary()));
+    scott.setSalary(scott.getSalary() + (0.1 * scott.getSalary()));
     employeeDao.update(scott);
     log.info(scott);
   }
